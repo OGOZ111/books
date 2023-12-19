@@ -15,8 +15,8 @@ import { Stack, Typography } from "@mui/material";
 
 //
 function AddBook() {
-  const { alert, post } = useAxios("http://localhost:3001"); // useAxios custom hook that is posting to the "fake json" server
-  const [rateValue, setRateValue] = useState(5); // setting the UI to show how many stars 1-5
+  const { alert, post } = useAxios("http://localhost:3000"); // useAxios custom hook that is posting to the "fake json" server
+  const [rateValue, setRateValue] = useState(0); // setting the UI to show how many stars 1-5
   const [book, setBook] = useState({
     //on key press, returns the setState for whatds typed in these fields.
     author: "",
@@ -56,7 +56,8 @@ function AddBook() {
     }
   };
 
-  function postHandler() {
+  function postHandler(e) {
+    e.preventDefault();
     post("books", book);
   }
 

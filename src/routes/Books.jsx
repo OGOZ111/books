@@ -27,15 +27,7 @@ function Books() {
     }
   }, []);
 
-  // TODO: Replace axios with useAxios hook
   async function getBooks() {
-    // try {
-    //   const response = await axios.get("http://localhost:3000/books");
-    //   setBooks(response.data);
-    //   setIsLoading(false);
-    // } catch (error) {
-    //   console.error(error);
-    // }
     get("books");
   }
 
