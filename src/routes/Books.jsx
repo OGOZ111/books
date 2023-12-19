@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { bookGenres } from "../genres";
 import {
   Box,
   Card,
@@ -11,11 +12,13 @@ import {
   Rating,
   Chip,
   Typography,
-} from '@mui/material';
+  TextField,
+} from "@mui/material";
 
 function Books() {
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (books.length === 0) {
@@ -26,7 +29,7 @@ function Books() {
   // TODO: Replace axios with useAxios hook
   async function getBooks() {
     try {
-      const response = await axios.get('http://localhost:3000/books');
+      const response = await axios.get("http://localhost:3000/books");
       setBooks(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -34,67 +37,94 @@ function Books() {
     }
   }
 
+  const filterByTagSet = new Set(bookGenres);
+
+  const handleChange = (e) => {
+    const searchString = e.target.value.toLowerCase();
+    setSearch(searchString);
+  };
+
   // TODO: Implement search functionality
   return (
-    <Box sx={{ mx: 'auto', p: 2 }}>
+    <Box
+      sx={{
+        mx: "auto",
+        p: 2,
+      }}
+    >
       {isLoading && <CircularProgress />}
       {!isLoading && (
-        <div>
+        <div className="bigdiv">
+          <div className="littlediv">
+            <TextField
+              className="bar"
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              onChange={handleChange}
+            />
+          </div>
           <Stack
-            sx={{ justifyContent: 'space-around' }}
+            sx={{ justifyContent: "space-around" }}
             spacing={{ xs: 1 }}
             direction="row"
             useFlexGap
             flexWrap="wrap"
           >
-            {books.map((book) => (
-              <Card
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '15%',
-                  minWidth: 200,
-                }}
-                key={book.name}
-              >
-                <CardMedia
-                  sx={{ height: 250 }}
-                  image={book.img}
-                  title={book.name}
-                />
-                <Box sx={{ pt: 2, pl: 2 }}>
-                  {book.genres.map((genre, i) => (
-                    <Chip
-                      key={i}
-                      label={genre}
-                      variant="outlined"
+            {books
+              ?.filter(
+                (item) =>
+                  item.author.toLowerCase().includes(search) ||
+                  item.name.toLowerCase().includes(search)
+              )
+              .map((book) => (
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "15%",
+                    minWidth: 200,
+                  }}
+                  key={book.name}
+                >
+                  <CardMedia
+                    sx={{ height: 250 }}
+                    image={book.img}
+                    title={book.name}
+                  />
+                  <Box sx={{ pt: 2, pl: 2 }}>
+                    {book.genres.map((genre, i) => (
+                      <Chip
+                        key={i}
+                        label={genre}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ))}
+                    <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
+                      {book.name}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                      {book.author}
+                    </Typography>
+                  </Box>
+                  <CardActions
+                    sx={{
+                      justifyContent: "space-between",
+                      mt: "auto",
+                      pl: 2,
+                    }}
+                  >
+                    <Rating
+                      name="read-only"
+                      value={book.stars}
+                      readOnly
                       size="small"
                     />
-                  ))}
-                  <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
-                    {book.name}
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {book.author}
-                  </Typography>
-                </Box>
-                <CardActions
-                  sx={{
-                    justifyContent: 'space-between',
-                    mt: 'auto',
-                    pl: 2,
-                  }}
-                >
-                  <Rating
-                    name="read-only"
-                    value={book.stars}
-                    readOnly
-                    size="small"
-                  />
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            ))}
+                    <Button size="small">Learn More</Button>
+                  </CardActions>
+                </Card>
+              ))}
           </Stack>
         </div>
       )}

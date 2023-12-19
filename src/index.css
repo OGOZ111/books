@@ -1,2 +1,15 @@
 body {
 }
+
+.bigdiv {
+    display: "flex";
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.littlediv {
+    text-align: center;
+    margin-bottom: 30px;
+}
