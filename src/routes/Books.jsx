@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { bookGenres } from "../genres";
+//import { bookGenres } from "../genres";
+import useAxios from "../services/useAxios";
+
 import {
   Box,
   Card,
@@ -16,28 +17,29 @@ import {
 } from "@mui/material";
 
 function Books() {
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const URL = "http://localhost:3000";
+  const { data, loading, get } = useAxios(URL);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (books.length === 0) {
+    if (data.length === 0) {
       getBooks();
     }
   }, []);
 
   // TODO: Replace axios with useAxios hook
   async function getBooks() {
-    try {
-      const response = await axios.get("http://localhost:3000/books");
-      setBooks(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   const response = await axios.get("http://localhost:3000/books");
+    //   setBooks(response.data);
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    get("books");
   }
 
-  const filterByTagSet = new Set(bookGenres);
+  //const filterByTagSet = new Set(bookGenres);
 
   const handleChange = (e) => {
     const searchString = e.target.value.toLowerCase();
@@ -52,8 +54,8 @@ function Books() {
         p: 2,
       }}
     >
-      {isLoading && <CircularProgress />}
-      {!isLoading && (
+      {loading && <CircularProgress />}
+      {!loading && (
         <div className="bigdiv">
           <div className="littlediv">
             <TextField
@@ -71,7 +73,7 @@ function Books() {
             useFlexGap
             flexWrap="wrap"
           >
-            {books
+            {data
               ?.filter(
                 (item) =>
                   item.author.toLowerCase().includes(search) ||
