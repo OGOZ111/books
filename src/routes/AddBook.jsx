@@ -17,6 +17,7 @@ import { Stack, Typography } from "@mui/material";
 function AddBook() {
   const { alert, post } = useAxios("http://localhost:3000"); // useAxios custom hook that is posting to the "fake json" server
   const [rateValue, setRateValue] = useState(0); // setting the UI to show how many stars 1-5
+  const [imageURL, setImageURL] = useState("");
   const [book, setBook] = useState({
     //on key press, returns the setState for whatds typed in these fields.
     author: "",
@@ -89,6 +90,7 @@ function AddBook() {
           id="outlined-basic"
           label="Image (url)"
           variant="outlined"
+          value={imageURL}
         />
         <Select
           labelId="demo-multiple-name-label"

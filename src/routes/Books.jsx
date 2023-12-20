@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 //import { bookGenres } from "../genres";
 import useAxios from "../services/useAxios";
+import { Link } from "react-router-dom";
 
 import {
   Box,
@@ -37,7 +38,7 @@ function Books() {
     const searchString = e.target.value.toLowerCase();
     setSearch(searchString);
   };
-
+  console.log(data);
   // TODO: Implement search functionality
   return (
     <Box
@@ -115,7 +116,9 @@ function Books() {
                       readOnly
                       size="small"
                     />
-                    <Button size="small">Learn More</Button>
+                    <Link to={book.name}>
+                      <Button size="small">Learn More</Button>
+                    </Link>
                   </CardActions>
                 </Card>
               ))}
