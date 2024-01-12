@@ -23,6 +23,7 @@ function AddBook() {
     author: "",
     name: "",
     genres: [],
+    img: "https://upload.wikimedia.org/wikipedia/en/0/05/Littleprince.JPG",
     completed: false,
     start: null,
     end: null,
